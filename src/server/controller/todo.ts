@@ -56,7 +56,36 @@ async function create(request: NextApiRequest, response: NextApiResponse) {
   });
 }
 
+async function toggleDone(request: NextApiRequest, response: NextApiResponse) {
+  const todoId = request.query.id;
+
+  if (!todoId || typeof todoId !== "string") {
+    response.status(400).json({
+      error: {
+        message: "You must provide a todoId",
+      },
+    });
+    return;
+  }
+
+  try {
+    const updatedTodo = await todoRepository.toggleDone(todoId);
+    response.status(200).json({
+      todo: updatedTodo,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      response.status(404).json({
+        error: {
+          message: error.message,
+        },
+      });
+    }
+  }
+}
+
 export const todoController = {
   get,
   create,
+  toggleDone,
 };

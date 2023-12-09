@@ -8,6 +8,7 @@ const bg = "/bg.jpeg";
 interface Todo {
   id: string;
   content: string;
+  done: boolean;
 }
 
 function HomePage() {
@@ -61,7 +62,7 @@ function HomePage() {
                 });
                 setNewTodoContent("");
               },
-              onError(customMessage: string) {
+              onError(customMessage?: string) {
                 alert(
                   customMessage ||
                     "Você precisa ter um conteúdo para criar uma TODO!"
@@ -112,10 +113,37 @@ function HomePage() {
               return (
                 <tr key={currentTodo.id}>
                   <td>
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      checked={currentTodo.done}
+                      onChange={function handleToggle() {
+                        todoController.toggleDone({
+                          id: currentTodo.id,
+                          onError(customMessage?: string) {
+                            alert(customMessage || "Falha ao atualizar TODO");
+                          },
+                          updateTodoOnScreen() {
+                            setTodos((currentTodos) => {
+                              return currentTodos.map((todo) => {
+                                if (todo.id === currentTodo.id) {
+                                  return {
+                                    ...currentTodo,
+                                    done: !currentTodo.done,
+                                  };
+                                }
+                                return todo;
+                              });
+                            });
+                          },
+                        });
+                      }}
+                    />
                   </td>
                   <td>{currentTodo.id.substring(0, 4)}</td>
-                  <td>{currentTodo.content}</td>
+                  <td>
+                    {!currentTodo.done && currentTodo.content}
+                    {currentTodo.done && <s>currentTodo.content</s>}
+                  </td>
                   <td align="right">
                     <button data-type="delete">Apagar</button>
                   </td>
