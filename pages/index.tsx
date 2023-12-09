@@ -61,8 +61,11 @@ function HomePage() {
                 });
                 setNewTodoContent("");
               },
-              onError() {
-                alert("Você precisa ter um conteúdo para criar uma TODO!");
+              onError(customMessage: string) {
+                alert(
+                  customMessage ||
+                    "Você precisa ter um conteúdo para criar uma TODO!"
+                );
               },
             });
           }}
