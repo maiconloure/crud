@@ -64,9 +64,14 @@ function toggleDone({
     });
 }
 
+async function deleteById(id: string): Promise<void> {
+  todoRepository.deleteById(id);
+}
+
 export const todoController = {
   get,
   filterTodosByContent,
   create,
   toggleDone,
+  deleteById,
 };
