@@ -1,7 +1,7 @@
 {
-	"name": "crud-com-qualidade",
+	"name": "crud",
 	"version": "1.0.0",
-	"description": "",
+	"description": "CRUD Study Project",
 	"main": "index.js",
 	"scripts": {
 		"start:crud": "npx ts-node core/crud.ts",
@@ -10,16 +10,19 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "eslint './**/*.{jsx,jsx,ts,tsx}'",
-		"lint:fix": "npm run lint -- --fix"
+		"lint:fix": "npm run lint -- --fix",
+		"cy:open": "cypress open",
+		"cy:run": "cypress run",
+		"test": "start-server-and-test dev http://localhost:3000 cy:run"
 	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
+	"author": "Maicon Lourenço",
+	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^20.10.3",
 		"@types/react": "18.0.29",
 		"@types/uuid": "^9.0.7",
 		"@typescript-eslint/eslint-plugin": "^5.56.0",
+		"cypress": "^13.6.1",
 		"eslint": "^8.36.0",
 		"eslint-config-prettier": "^8.8.0",
 		"eslint-plugin-import": "^2.27.5",
@@ -28,7 +31,8 @@
 		"eslint-plugin-promise": "^6.1.1",
 		"eslint-plugin-react": "^7.32.2",
 		"nodemon": "^2.0.21",
-		"prettier": "^2.8.7"
+		"prettier": "^2.8.7",
+		"start-server-and-test": "^2.0.3"
 	},
 	"dependencies": {
 		"next": "^13.2.4",
