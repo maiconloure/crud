@@ -8,5 +8,12 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+      - name: "Debug"
+        run: |
+          ls -la
+          echo "Segundo comando do debug"
+      - name: "Install Dependencies"
+        run: "npm install"
       - name: "Lint"
-        run: "echo 'Test GH Actions"
+        run: "npm run lint"
