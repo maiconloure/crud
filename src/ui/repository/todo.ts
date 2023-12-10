@@ -48,13 +48,13 @@ export async function createByContent(content: string): Promise<Todo> {
     const serverResponseParsed = ServerResponseSchema.safeParse(serverResponse);
 
     if (!serverResponseParsed.success) {
-      throw new Error("Failed to create TODO!");
+      throw new Error("Failed to create ToDo");
     }
     const todo = serverResponseParsed.data.todo;
     return todo;
   }
 
-  throw new Error("Failed to create TODO");
+  throw new Error("Failed to create ToDo");
 }
 
 async function toggleDone(todoId: string): Promise<Todo> {
@@ -70,7 +70,7 @@ async function toggleDone(todoId: string): Promise<Todo> {
     const serverResponseParsed = ServerResponseSchema.safeParse(serverResponse);
 
     if (!serverResponseParsed.success) {
-      throw new Error(`Failed to update TODO with id: ${todoId}`);
+      throw new Error(`Failed to update ToDo with id: ${todoId}`);
     }
 
     const updatedTodo = serverResponseParsed.data.todo;
@@ -96,14 +96,6 @@ export const todoRepository = {
   toggleDone,
   deleteById,
 };
-
-// Model/Schema
-// interface Todo {
-//   id: string;
-//   content: string;
-//   date: Date;
-//   done: boolean;
-// }
 
 function parseTodosFromServer(responseBody: unknown): {
   total: number;

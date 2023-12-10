@@ -142,7 +142,7 @@ function HomePage() {
                   <td>{currentTodo.id.substring(0, 4)}</td>
                   <td>
                     {!currentTodo.done && currentTodo.content}
-                    {currentTodo.done && <s>currentTodo.content</s>}
+                    {currentTodo.done && <s>{currentTodo.content}</s>}
                   </td>
                   <td align="right">
                     <button
@@ -157,7 +157,7 @@ function HomePage() {
                               });
                             });
                           })
-                          .catch(() => {
+                          .catch((error) => {
                             alert("Falha ao deletar TODO");
                             console.error("Failed to delete");
                           });
@@ -193,7 +193,6 @@ function HomePage() {
                     data-type="load-more"
                     onClick={() => {
                       setIsLoading(true);
-
                       const nextPage = page + 1;
                       setPage(nextPage);
 

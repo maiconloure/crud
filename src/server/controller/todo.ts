@@ -3,7 +3,7 @@ import { z as schema } from "zod";
 import { todoRepository } from "@server/repository/todo";
 import { HttpNotFoundError } from "@server/infra/errors";
 
-function get(request: NextApiRequest, response: NextApiResponse) {
+async function get(request: NextApiRequest, response: NextApiResponse) {
   const query = request.query;
   const page = Number(query.page);
   const limit = Number(query.limit);
@@ -24,13 +24,21 @@ function get(request: NextApiRequest, response: NextApiResponse) {
     });
   }
 
-  const output = todoRepository.get({ page, limit });
+  try {
+    const output = await todoRepository.get({ page, limit });
 
-  response.status(200).json({
-    pages: output.pages,
-    total: output.total,
-    todos: output.todos,
-  });
+    response.status(200).json({
+      pages: output.pages,
+      total: output.total,
+      todos: output.todos,
+    });
+  } catch (error) {
+    response.status(500).json({
+      error: {
+        message: "Internal Server Error",
+      },
+    });
+  }
 }
 
 const TodoCreateBodySchema = schema.object({
@@ -43,18 +51,26 @@ async function create(request: NextApiRequest, response: NextApiResponse) {
   if (!body.success) {
     response.status(400).json({
       error: {
-        message: "You need to provide a content to create a TODO",
+        message: "You need to provide a content to create a ToDo",
         description: body.error.issues,
       },
     });
     return;
   }
 
-  const createdTodo = await todoRepository.createByContent(body.data.content);
+  try {
+    const createdTodo = await todoRepository.createByContent(body.data.content);
 
-  response.status(201).json({
-    todo: createdTodo,
-  });
+    response.status(201).json({
+      todo: createdTodo,
+    });
+  } catch (error) {
+    response.status(400).json({
+      error: {
+        message: "Failed to create ToDo",
+      },
+    });
+  }
 }
 
 async function toggleDone(request: NextApiRequest, response: NextApiResponse) {
@@ -63,7 +79,7 @@ async function toggleDone(request: NextApiRequest, response: NextApiResponse) {
   if (!todoId || typeof todoId !== "string") {
     response.status(400).json({
       error: {
-        message: "You must provide a todoId",
+        message: "You must provide an id",
       },
     });
     return;
@@ -94,7 +110,7 @@ async function deleteById(request: NextApiRequest, response: NextApiResponse) {
   if (!parsedQuery.success) {
     response.status(400).json({
       error: {
-        message: `You must to provide a valid id`,
+        message: `You must to provide a valid uuid`,
       },
     });
     return;
