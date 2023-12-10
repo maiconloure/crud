@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { GlobalStyles } from "@ui/theme/GlobalStyles";
 import { todoController } from "@ui/controller/todo";
-import { todo } from "node:test";
 
 const bg = "/bg.jpeg";
 
