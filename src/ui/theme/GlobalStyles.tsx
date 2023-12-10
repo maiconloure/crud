@@ -234,7 +234,7 @@ export function GlobalStyles({ themeName }: { themeName?: ThemeName }) {
           cursor: pointer;
           aspect-ratio: 1;
           border: none;
-          padding: 0;
+          padding: 10px;
           font-size: 30px;
           transform: scale(0.8);
           transition: all 0.2s;

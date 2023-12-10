@@ -34,7 +34,7 @@ async function create({
 }: TodoControllerCreateParams) {
   const parsedParams = schema.string().min(1).safeParse(content);
   if (!parsedParams.success) {
-    onError("Você PRECISA passar um conteúdo!");
+    onError("You must need a content to create a ToDo");
     return;
   }
 
