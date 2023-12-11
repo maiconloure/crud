@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { GlobalStyles } from "@ui/theme/GlobalStyles";
 import { todoController } from "@ui/controller/todo";
@@ -48,7 +49,7 @@ function HomePage() {
         }}
       >
         <div className="typewriter">
-          <h1>O que fazer hoje?</h1>
+          <h1>What do today?</h1>
         </div>
         <form
           onSubmit={(event) => {
@@ -62,10 +63,7 @@ function HomePage() {
                 setNewTodoContent("");
               },
               onError(customMessage?: string) {
-                alert(
-                  customMessage ||
-                    "Você precisa ter um conteúdo para criar uma TODO!"
-                );
+                alert(customMessage || " You need a content to create a ToDo");
               },
             });
           }}
@@ -73,13 +71,13 @@ function HomePage() {
           <input
             name="add-todo"
             type="text"
-            placeholder="Correr, Estudar..."
+            placeholder="Run, Study..."
             value={newTodoContent}
             onChange={function newTodoHandler(event) {
               setNewTodoContent(event.target.value);
             }}
           />
-          <button type="submit" aria-label="Adicionar novo item">
+          <button type="submit" aria-label="Add new item">
             +
           </button>
         </form>
@@ -89,7 +87,7 @@ function HomePage() {
         <form>
           <input
             type="text"
-            placeholder="Filtrar lista atual, ex: Dentista"
+            placeholder="Filter current list, ex: Workout"
             onChange={function handleSearch(event) {
               setSearch(event.target.value);
             }}
@@ -102,8 +100,8 @@ function HomePage() {
               <th align="left">
                 <input type="checkbox" disabled />
               </th>
-              <th align="left">Id</th>
-              <th align="left">Conteúdo</th>
+              <th align="left">ID</th>
+              <th align="left">Content</th>
               <th />
             </tr>
           </thead>
@@ -120,7 +118,7 @@ function HomePage() {
                         todoController.toggleDone({
                           id: currentTodo.id,
                           onError(customMessage?: string) {
-                            alert(customMessage || "Falha ao atualizar TODO");
+                            alert(customMessage || "Failed to update ToDo");
                           },
                           updateTodoOnScreen() {
                             setTodos((currentTodos) => {
@@ -157,13 +155,12 @@ function HomePage() {
                               });
                             });
                           })
-                          .catch((error) => {
-                            alert("Falha ao deletar TODO");
-                            console.error("Failed to delete");
+                          .catch(() => {
+                            alert("Failed to delete ToDo");
                           });
                       }}
                     >
-                      Apagar
+                      Remove
                     </button>
                   </td>
                 </tr>
@@ -173,7 +170,7 @@ function HomePage() {
             {isLoading && (
               <tr>
                 <td colSpan={4} align="center" style={{ textAlign: "center" }}>
-                  Carregando...
+                  Loading...
                 </td>
               </tr>
             )}
@@ -181,7 +178,7 @@ function HomePage() {
             {hasNoTodos && (
               <tr>
                 <td colSpan={4} align="center">
-                  Nenhum item encontrado
+                  No items found
                 </td>
               </tr>
             )}
@@ -209,7 +206,7 @@ function HomePage() {
                         });
                     }}
                   >
-                    Pagina: {page}, Carregar mais{" "}
+                    Page: {page}, Load more{" "}
                     <span
                       style={{
                         display: "inline-block",
