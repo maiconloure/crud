@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { z as schema } from "zod";
 import { todoRepository } from "@server/repository/todo";
 import { HttpNotFoundError } from "@server/infra/errors";
@@ -53,11 +52,11 @@ async function get(request: Request) {
     return new Response(
       JSON.stringify({
         error: {
-          message: "Internal Server Error",
+          message: "Failed to get TODOs",
         },
       }),
       {
-        status: 500,
+        status: 400,
       }
     );
   }
@@ -109,47 +108,68 @@ async function create(request: Request) {
   }
 }
 
-async function toggleDone(request: NextApiRequest, response: NextApiResponse) {
-  const todoId = request.query.id;
+async function toggleDone(request: Request, id: string) {
+  const todoId = id;
 
   if (!todoId || typeof todoId !== "string") {
-    response.status(400).json({
-      error: {
-        message: "You must provide an id",
-      },
-    });
-    return;
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "You must provide an id",
+        },
+      }),
+      {
+        status: 400,
+      }
+    );
   }
 
   try {
     const updatedTodo = await todoRepository.toggleDone(todoId);
-    response.status(200).json({
-      todo: updatedTodo,
-    });
+    return new Response(
+      JSON.stringify({
+        todo: updatedTodo,
+      }),
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     if (error instanceof Error) {
-      response.status(404).json({
-        error: {
-          message: error.message,
-        },
-      });
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: error.message,
+          },
+        }),
+        {
+          status: 404,
+        }
+      );
     }
   }
 }
 
-async function deleteById(request: NextApiRequest, response: NextApiResponse) {
+async function deleteById(request: Request, id: string) {
+  const query = {
+    id,
+  };
   const QuerySchema = schema.object({
     id: schema.string().uuid().min(1),
   });
 
-  const parsedQuery = QuerySchema.safeParse(request.query);
+  const parsedQuery = QuerySchema.safeParse(query);
   if (!parsedQuery.success) {
-    response.status(400).json({
-      error: {
-        message: `You must to provide a valid uuid`,
-      },
-    });
-    return;
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: `You must to provide a valid uuid`,
+        },
+      }),
+      {
+        status: 400,
+      }
+    );
   }
 
   try {
@@ -157,21 +177,33 @@ async function deleteById(request: NextApiRequest, response: NextApiResponse) {
 
     await todoRepository.deleteById(todoId);
 
-    response.status(204).end();
+    return new Response(null, {
+      status: 204,
+    });
   } catch (error) {
     if (error instanceof HttpNotFoundError) {
-      response.status(error.status).json({
-        error: {
-          message: error.message,
-        },
-      });
-      return;
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: error.message,
+          },
+        }),
+        {
+          status: error.status,
+        }
+      );
     }
-    response.status(500).json({
-      error: {
-        message: `Failed to delete resource`,
-      },
-    });
+
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: `Failed to delete resource`,
+        },
+      }),
+      {
+        status: 500,
+      }
+    );
   }
 }
 

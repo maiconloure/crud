@@ -345,6 +345,7 @@ export function GlobalStyles({ themeName }: { themeName?: ThemeName }) {
         button[data-type="delete"] {
           background-color: transparent;
           color: var(--color-negative-x500);
+          font-weight: bold;
         }
         button[data-type="delete"]:hover,
         button[data-type="delete"]:focus {
